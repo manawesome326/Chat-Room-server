@@ -12,28 +12,46 @@ Port = int(sys.argv[2])
 server.connect((IP_address, Port))
 
 def exit_handler():
-    server.send("see ya suckers")
+    server.send("/quit")
 
 atexit.register(exit_handler)
 
 sockets_list = [sys.stdin, server]
 read_sockets,write_socket, error_socket = select.select(sockets_list, [], [])
-server.send("yo what up")
-
+mynameis = raw_input("Who are you? ")
+server.send("/iwasalways " + mynameis)
+hastbegun = False
 while True:
     sockets_list = [sys.stdin, server]
     read_sockets,write_socket, error_socket = select.select(sockets_list, [], [])
     for socks in read_sockets:
         if socks == server:
             message = socks.recv(2048)
-            print message
+            if hastbegun == False:
+                print(message)
+                hastbegun = True
+            else:
+                print(message+"\a")
         else:
             message = sys.stdin.readline()
-            server.send(message)
             if message[:1] == "/":
-                if message[:4] == "/iam":
-                    print "You shall now be known as " + message[5:-1]
+                command = message.split()[0]
+                if len(message.split()) > 1:
+                    args = message.split()[1]
+                if command == "/iam":
+                    print "You shall now be known as " + args
+                if command == "/quit":
+                    print "oh no"
+                    quit()
+                server.send(message)
+            elif message[:4] == "I am":
+                print "You shall now be known as " + message[5:-1]
+                server.send("/iam " + message[5:])
+            elif message[:6] == "I quit":
+                print "oh no"
+                quit()
             else:
+                server.send(message[:-1])
                 sys.stdout.write("<You>")
                 sys.stdout.write(message)
                 sys.stdout.flush()

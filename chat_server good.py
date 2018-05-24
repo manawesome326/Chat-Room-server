@@ -24,18 +24,32 @@ list_of_clients=[]
 
 def clientthread(conn, addr):
     conn.send("welcome to the hell")
-    #sends a message to the client whose user object is conn
+    #sends a message to the client whose user object is conn   
     clientname = addr[0]
+    message = conn.recv(2048)
+    if message.split()[0] == "/iwasalways":
+        if len(message.split()) == 2:
+            args = message.split()[1]
+            clientname = args
+        else:
+            clientname = addr[0]
+        broadcast("[god] " + clientname + " has just joined", conn)
+    else:
+        remove(conn)
     while True:
         try:     
             message = conn.recv(2048)    
             if message:
                 if message[:1] == "/":
-                    if message[:4] == "/iam":
-                        message_to_send = clientname + " shall now be known as " + message[5:-1]
-                        print message_to_send
-                        broadcast(message_to_send,conn)
-                        clientname = message[5:-1]
+                    command = message.split()[0]
+                    if len(message.split()) == 2:
+                        args = message.split()[1]
+                    if command == "/iam":
+                        broadcast("[god] " + clientname + " is actually " + args,conn)
+                        clientname = args
+                    elif command == "/quit":
+                        broadcast("[god] " + clientname + " has left",conn)
+                        print(addr[0] + " disconnected")
                 else:    
                     print "<" + clientname + "> " + message
                     message_to_send = "<" + clientname + "> " + message
@@ -47,6 +61,7 @@ def clientthread(conn, addr):
             continue
 
 def broadcast(message,connection):
+    print message
     for clients in list_of_clients:
         if clients!=connection:
             try:
@@ -70,7 +85,7 @@ while True:
     #maintains a list of clients for ease of broadcasting a message to all available people in the chatroom
     #Prints the address of the person who just connected
     start_new_thread(clientthread,(conn,addr))
-    #creates and individual thread for every user that connects
+    #creates an individual thread for every user that connects
 
 conn.close()
 server.close()
