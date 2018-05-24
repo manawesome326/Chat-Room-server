@@ -44,12 +44,6 @@ while True:
                     print "oh no"
                     quit()
                 server.send(message)
-            elif message[:4] == "I am":
-                print "You shall now be known as " + message[5:-1]
-                server.send("/iam " + message[5:])
-            elif message[:6] == "I quit":
-                print "oh no"
-                quit()
             else:
                 server.send(message[:-1])
                 sys.stdout.write("<You>")
