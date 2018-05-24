@@ -34,7 +34,7 @@ while True:
                 print(message+"\a")
         else:
             message = sys.stdin.readline()
-            if message[:1] == "/":
+            if message[:1] == "/": # Checks if the user entered a command
                 command = message.split()[0]
                 if len(message.split()) > 1:
                     args = message.split()[1]
