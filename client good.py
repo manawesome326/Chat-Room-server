@@ -2,6 +2,7 @@ import socket
 import select
 import sys
 import atexit
+import datetime
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 if len(sys.argv) != 3:
@@ -32,6 +33,7 @@ server.send("/iwasalways " + mynameis)
 hastbegun = False
 alertson = True
 isgod = False
+timestamps = True
 
 while True:
     sockets_list = [sys.stdin, server]
@@ -46,9 +48,15 @@ while True:
                 hastbegun = True
             else:
                 if alertson == True:
-                    print(message+"\a")
+                    if timestamps == True:
+                        print(datetime.datetime.now().strftime("%X")[:-3] + ":" + str(datetime.datetime.now().strftime("%S")) + " " + message+"\a")
+                    else:
+                        print(message+"\a")
                 else:
-                    print(message)
+                    if timestamps == True:
+                        print(datetime.datetime.now().strftime("%X")[:-3] + ":" + str(datetime.datetime.now().strftime("%X")) + " " + message)
+                    else:
+                        print(message)
         else:
             message = sys.stdin.readline()
             if message[:1] == "/":
@@ -77,17 +85,22 @@ while True:
                     alertson = not alertson
                     print "[me] Most alerts are now turned " + onoff(alertson) 
                 elif command == "/help":
-                    print "[me] Some commands are available:\n/iam [username] - change your name\n/quit - leave the server\n/alerts - toggle the alerts\n/help - display this message\n/becomegod - ASCEND"
+                    print "[me] Some commands are available:\n/iam [username] - change your name\n/quit - leave the server\n/alerts - toggle the alerts\n/timestamps - toggle the timestamps\n/help - display this message\n/becomegod - ASCEND"
+                elif command == "/timestamps":
+                    timestamps = not timestamps
+                    print "[me] Most timestamps are now turned " + onoff(timestamps) 
                 else:
                     print "[me] That command doesn't exist, try again genius\a"
                 args = None
             else:
                 sendmess(message)
                 sys.stdout.write("\033[F")
+                if timestamps == True:
+                    sys.stdout.write(datetime.datetime.now().strftime("%X")[:-3] + ":" + str(datetime.datetime.now().strftime("%S")) + " ")
                 if isgod == True:
                     sys.stdout.write("[you] ")
                 else:
-                     sys.stdout.write("<You> ")
+                    sys.stdout.write("<You> ")
                 sys.stdout.write(message)
                 sys.stdout.flush()
 server.close()
