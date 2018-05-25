@@ -53,8 +53,7 @@ def clientthread(conn, addr):
                         else:
                         	conn.send("[god] You gotta pick a name, dude")
                     elif command == "/quit":
-                        broadcast("[god] " + clientname + " has left",conn)
-                        print(addr[0] + " disconnected")
+                        break
                     else:
                     	conn.send("[you] That command doesn't exist, try again genius")
                     args = None
@@ -65,6 +64,9 @@ def clientthread(conn, addr):
                 remove(conn)
         except:
             continue
+    broadcast("[god] " + clientname + " has left",conn)
+    print(addr[0] + " disconnected")
+    return(None)
 
 def broadcast(message,connection):
     message = message.strip("\n")

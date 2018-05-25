@@ -13,6 +13,7 @@ server.connect((IP_address, Port))
 
 def exit_handler():
     server.send("/quit")
+    server.close()
 
 atexit.register(exit_handler)
 
