@@ -18,7 +18,7 @@ IP_address = str(sys.argv[1])
 Port = int(sys.argv[2])
 server.bind((IP_address, Port)) 
 #binds the server to an entered IP address and at the specified port number. The client must be aware of these parameters
-server.listen(100)
+server.listen(int(raw_input("Pick max connections ")))
 #listens for 100 active connections. This number can be increased as per convenience
 list_of_clients=[]
 
@@ -81,6 +81,7 @@ def remove(connection):
     if connection in list_of_clients:
         list_of_clients.remove(connection)
 
+print("Now listening for connections to " + str(IP_address) + " on port " + str(Port))
 while True:
     conn, addr = server.accept()
     """
