@@ -55,7 +55,8 @@ while True:
                 args = None
             else:
                 server.send(message)
-                sys.stdout.write("<You>")
+                sys.stdout.write("\033[F")
+                sys.stdout.write("<You> ")
                 sys.stdout.write(message)
                 sys.stdout.flush()
 server.close()
