@@ -21,6 +21,7 @@ read_sockets,write_socket, error_socket = select.select(sockets_list, [], [])
 mynameis = raw_input("Who are you? ")
 server.send("/iwasalways " + mynameis)
 hastbegun = False
+
 while True:
     sockets_list = [sys.stdin, server]
     read_sockets,write_socket, error_socket = select.select(sockets_list, [], [])
@@ -34,18 +35,25 @@ while True:
                 print(message+"\a")
         else:
             message = sys.stdin.readline()
-            if message[:1] == "/": # Checks if the user entered a command
+            if message[:1] == "/":
                 command = message.split()[0]
-                if len(message.split()) > 1:
+                try:
                     args = message.split()[1]
+                except:
+                    pass
                 if command == "/iam":
-                    print "You shall now be known as " + args
-                if command == "/quit":
+                    try:
+                        print "You shall now be known as " + args
+                        server.send(message)
+                    except:
+                        print "[god] psst, you gotta pick a name, dude"
+                elif command == "/quit":
                     print "oh no"
                     quit()
-                server.send(message)
+                else:
+                    print "[god] psst, that command doesn't exist"
             else:
-                server.send(message[:-1])
+                server.send(message)
                 sys.stdout.write("<You>")
                 sys.stdout.write(message)
                 sys.stdout.flush()

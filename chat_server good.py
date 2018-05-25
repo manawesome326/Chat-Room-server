@@ -42,18 +42,19 @@ def clientthread(conn, addr):
             if message:
                 if message[:1] == "/":
                     command = message.split()[0]
-                    if len(message.split()) == 2:
+                    try:
                         args = message.split()[1]
+                    except:
+                        pass
                     if command == "/iam":
                         broadcast("[god] " + clientname + " is actually " + args,conn)
                         clientname = args
                     elif command == "/quit":
                         broadcast("[god] " + clientname + " has left",conn)
                         print(addr[0] + " disconnected")
-                else:    
-                    print "<" + clientname + "> " + message
-                    message_to_send = "<" + clientname + "> " + message
-                    broadcast(message_to_send,conn)
+                    args = ""
+                else:
+                    broadcast("<" + clientname + "> " + message,conn)
                     #prints the message and address of the user who just sent the message on the server terminal
             else:
                 remove(conn)
@@ -61,6 +62,7 @@ def clientthread(conn, addr):
             continue
 
 def broadcast(message,connection):
+    message = message.strip("\n")
     print message
     for clients in list_of_clients:
         if clients!=connection:
