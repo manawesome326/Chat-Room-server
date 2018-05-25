@@ -47,14 +47,17 @@ def clientthread(conn, addr):
                     except:
                         pass
                     if command == "/iam":
-                        broadcast("[god] Turns out " + clientname + " is actually " + args,conn)
-                        clientname = args
+                    	if args:
+                        	broadcast("[god] Turns out " + clientname + " is actually " + args,conn)
+                        	clientname = args
+                        else:
+                        	conn.send("[god] You gotta pick a name, dude")
                     elif command == "/quit":
                         broadcast("[god] " + clientname + " has left",conn)
                         print(addr[0] + " disconnected")
                     else:
                     	conn.send("[you] That command doesn't exist, try again genius")
-                    args = ""
+                    args = None
                 else:
                     broadcast("<" + clientname + "> " + message,conn)
                     #prints the message and address of the user who just sent the message on the server terminal
