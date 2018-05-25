@@ -43,15 +43,16 @@ while True:
                     pass
                 if command == "/iam":
                     try:
-                        print "You shall now be known as " + args
+                        print "[you] You shall now be known as " + args
                         server.send(message)
                     except:
-                        print "[god] psst, you gotta pick a name, dude"
+                        print "[you] psst, you gotta pick a name, dude"
                 elif command == "/quit":
                     print "oh no"
                     quit()
                 else:
-                    print "[god] psst, that command doesn't exist"
+                    print "[you] That command doesn't exist, try again genius"
+                args = None
             else:
                 server.send(message)
                 sys.stdout.write("<You>")

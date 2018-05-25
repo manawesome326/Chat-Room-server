@@ -47,11 +47,13 @@ def clientthread(conn, addr):
                     except:
                         pass
                     if command == "/iam":
-                        broadcast("[god] " + clientname + " is actually " + args,conn)
+                        broadcast("[god] Turns out " + clientname + " is actually " + args,conn)
                         clientname = args
                     elif command == "/quit":
                         broadcast("[god] " + clientname + " has left",conn)
                         print(addr[0] + " disconnected")
+                    else:
+                    	conn.send("[you] That command doesn't exist, try again genius")
                     args = ""
                 else:
                     broadcast("<" + clientname + "> " + message,conn)
