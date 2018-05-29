@@ -3,6 +3,7 @@ import select
 from thread import *
 import sys
 import random
+import re
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 """
@@ -23,22 +24,23 @@ server.listen(int(raw_input("Pick max connections ")))
 list_of_clients=[]
 thepasscode = random.randint(0,9999)
 print "The passcode is " + str(thepasscode)
+maxlen = 16
 
 def clientthread(conn, addr):
-    conn.send("welcome to the hell")
+    conn.send("Welcome to the cool zone")
     #sends a message to the client whose user object is conn   
-    clientname = addr[0]
+    clientname = "<" + addr[0] + ">"
     message = conn.recv(2048)
     if message.split(None, 1)[0] == "/iwasalways":
         if len(message.split(None, 1)) == 2:
-            args = message.split(None, 1)[1]
-            if args == "god":
+            args = re.sub('[^a-zA-Z0-9_ ]', '', message.split(None, 1)[1])
+            if args.lower() == "god":
                 conn.send("[god] No you're not!")
                 clientname = addr[0]
             else:    
-                clientname = "<" + args + ">"
+                clientname = "<" + args[:maxlen] + ">"
         else:
-            clientname = addr[0]
+            clientname = "<" + addr[0] + ">"
         broadcast("[god] " + clientname[1:-1] + " has just joined", conn)
     else:
         remove(conn)
@@ -49,15 +51,15 @@ def clientthread(conn, addr):
                 if message[:1] == "/":
                     command = message.split(None, 1)[0]
                     try:
-                        args = message.split(None, 1)[1]
+                        args = re.sub('[^a-zA-Z0-9_ ]', '', message.split(None, 1)[1])
                     except:
                         pass
                     if command == "/iam":
-                        if args != None and args != "god":
-                            newname = "<" + args + ">"
-                            broadcast("[god] Turns out " + clientname[1:-1] + " is actually " + args,conn)
+                        if args != None and args.lower != "god":
+                            newname = "<" + args[:maxlen] + ">"
+                            broadcast("[god] Turns out " + clientname[1:-1] + " is actually " + args[:maxlen],conn)
                             clientname = newname
-                        elif args == "god":
+                        elif args.lower() == "god":
                             conn.send("[god] Hey, no doppleganging")
                         else:
                             conn.send("[me] You gotta pick a name, dude")

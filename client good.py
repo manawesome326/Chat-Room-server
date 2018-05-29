@@ -3,6 +3,7 @@ import select
 import sys
 import atexit
 import datetime
+import re
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 if len(sys.argv) != 3:
@@ -34,6 +35,7 @@ hastbegun = False
 alertson = True
 isgod = False
 timestamps = True
+maxlen = 16
 
 while True:
     sockets_list = [sys.stdin, server]
@@ -62,13 +64,14 @@ while True:
             if message[:1] == "/":
                 command = message.split(None,1)[0]
                 try:
-                    args = message.split(None,1)[1]
+                    args = message.split(None, 1)[1]
                 except:
                     args = None
+                args = re.sub('[^a-zA-Z0-9_]', '', args)
                 if command == "/iam":
                     try:
-                    	if args.rstrip() != "god":
-                    		print "[me] You shall now be known as " + args.rstrip()
+                    	if args.rstrip().lower() != "god":
+                    		print "[me] You shall now be known as " + args.rstrip()[:maxlen]
                         sendmess(message)
                         isgod = False
                     except:
@@ -85,10 +88,12 @@ while True:
                     alertson = not alertson
                     print "[me] Most alerts are now turned " + onoff(alertson) 
                 elif command == "/help":
-                    print "[me] Some commands are available:\n/iam [username] - change your name\n/quit - leave the server\n/alerts - toggle the alerts\n/timestamps - toggle the timestamps\n/help - display this message\n/becomegod - ASCEND"
+                    print "[me] Some commands are available:\n/iam [username] - change your name\n/quit - leave the server\n/alerts - toggle the alerts\n/timestamps - toggle the timestamps\n/help - display this message\n/clear - clear the screen\n/becomegod - ASCEND"
                 elif command == "/timestamps":
                     timestamps = not timestamps
                     print "[me] Most timestamps are now turned " + onoff(timestamps) 
+                elif command == "/clear":
+                    print '\033[2J'
                 else:
                     print "[me] That command doesn't exist, try again genius\a"
                 args = None

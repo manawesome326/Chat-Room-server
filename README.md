@@ -10,3 +10,5 @@ Now with cool stuff like:
 - /help
 - you can now be god
 - god doesn't want you to be god and stops you from doing it
+- /clear
+- attempting to set your username to something stupid makes god scream in torment
