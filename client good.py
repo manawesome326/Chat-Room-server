@@ -65,9 +65,9 @@ while True:
                 command = message.split(None,1)[0]
                 try:
                     args = message.split(None, 1)[1]
+                    args = re.sub('[^a-zA-Z0-9_]', '', args)
                 except:
                     args = None
-                args = re.sub('[^a-zA-Z0-9_]', '', args)
                 if command == "/iam":
                     try:
                     	if args.rstrip().lower() != "god":
