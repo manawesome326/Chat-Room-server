@@ -12,3 +12,4 @@ Now with cool stuff like:
 - god doesn't want you to be god and stops you from doing it
 - /clear
 - attempting to set your username to something stupid makes god scream in torment
+- trash comments

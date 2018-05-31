@@ -20,70 +20,68 @@ Port = int(sys.argv[2])
 server.bind((IP_address, Port)) 
 #binds the server to an entered IP address and at the specified port number. The client must be aware of these parameters
 server.listen(int(raw_input("Pick max connections ")))
-#listens for 100 active connections. This number can be increased as per convenience
+#choose your own max client number
 list_of_clients=[]
 thepasscode = random.randint(0,9999)
-print "The passcode is " + str(thepasscode)
-maxlen = 16
+print "The passcode is " + str(thepasscode) #sets a passcode used to become god
+maxlen = 16 #the max length of the username, that is
 
 def clientthread(conn, addr):
     conn.send("Welcome to the cool zone")
-    #sends a message to the client whose user object is conn   
-    clientname = "<" + addr[0] + ">"
+    #sends the totally cool opening message 
+    clientname = "<" + addr[0] + ">" #you gotta set the name just in case
     message = conn.recv(2048)
-    if message.split(None, 1)[0] == "/iwasalways":
-        if len(message.split(None, 1)) == 2:
-            args = re.sub('[^a-zA-Z0-9_ ]', '', message.split(None, 1)[1])
+    if message.split(None, 1)[0] == "/iwasalways": #should be sent by client
+        if len(message.split(None, 1)) == 2: #I can't even remember what this bit does
+            args = re.sub('[^a-zA-Z0-9_\\ ]', '', message.split(None, 1)[1]) #properly sets the username
             if args.lower() == "god":
                 conn.send("[god] No you're not!")
                 clientname = addr[0]
             else:    
                 clientname = "<" + args[:maxlen] + ">"
-        else:
-            clientname = "<" + addr[0] + ">"
-        broadcast("[god] " + clientname[1:-1] + " has just joined", conn)
+        broadcast("[god] " + clientname[1:-1] + " has just joined", conn) #sends joining message
     else:
         remove(conn)
     while True:
         try:     
             message = conn.recv(2048)    
             if message:
-                if message[:1] == "/":
-                    command = message.split(None, 1)[0]
+                if message[:1] == "/": #checks if it's a command
+                    command = message.split(None, 1)[0] #command is now the command
                     try:
-                        args = re.sub('[^a-zA-Z0-9_ ]', '', message.split(None, 1)[1])
+                        args = re.sub('[^a-zA-Z0-9_\\ ]', '', message.split(None, 1)[1])
                     except:
                         pass
                     if command == "/iam":
-                        if args != None and args.lower != "god":
+                        if args != None and args != "god": 
                             newname = "<" + args[:maxlen] + ">"
-                            broadcast("[god] Turns out " + clientname[1:-1] + " is actually " + args[:maxlen],conn)
-                            clientname = newname
+                            broadcast("[god] Turns out " + clientname[1:-1] + " is actually " + args[:maxlen],conn) #renaming
+                            clientname = newname #clientname is the username of the client, duh.
                         elif args.lower() == "god":
                             conn.send("[god] Hey, no doppleganging")
                         else:
                             conn.send("[me] You gotta pick a name, dude")
                     elif command == "/quit":
-                        break
+                        break #You know, so it quits
                     elif command == "/becomegod":
                         if int(args) == thepasscode:
                             conn.send("[god] Wow, nice guess. Now you can type as me!")
                             broadcast("[god] " + clientname[1:-1] + " HAS ASCENDED!", conn)
-                            clientname = "[god]"
+                            clientname = "[god]" #becoming god business
                         else:
                             conn.send("[god] Wow, nice guess. jk, you were totally wrong")
                     else:
                         conn.send("[me] That command doesn't exist, try again")
-                    args = None
+                    args = None #resets args for next command
                 else:
-                    broadcast(clientname + " " + message,conn)
+                    broadcast(clientname + " " + message,conn) #sends message + username out to the world
             else:
                 remove(conn)
         except:
-            continue
-    broadcast("[god] " + clientname[1:-1] + " has left",conn)
-    print(addr[0] + " disconnected")
-    return(None)
+            continue # uhhhhh
+    broadcast("[god] " + clientname[1:-1] + " has left",conn) #disconnect message
+    print(addr[0] + " disconnected") # private disconnect message
+    return(None) #Prevents battery roasting
 
 def broadcast(message,connection):
     message = message.strip("\n")
@@ -108,7 +106,7 @@ while True:
     the IP address of the client that just connected
     """
     list_of_clients.append(conn)
-    print addr[0] + " connected"
+    print addr[0] + " connected" # connection message
     #maintains a list of clients for ease of broadcasting a message to all available people in the chatroom
     #Prints the address of the person who just connected
     start_new_thread(clientthread,(conn,addr))
