@@ -38,6 +38,7 @@ alertson = True
 isgod = False
 timestamps = True
 maxlen = 16
+messages = 0
 
 while True:
     sockets_list = [sys.stdin, server]
@@ -47,10 +48,14 @@ while True:
             message = socks.recv(2048)
             if message == "[god] Wow, nice guess. Now you can type as me!": #just checks if we're god now
                 isgod = True 
+            if message == "TIME TO DIE BEPIS MC WEPIS" or "" or None:
+                quit()
             if hastbegun == False: #never bongs on the first message
                 print(message)
                 hastbegun = True
             else:
+                if "e" not in message:
+                    messages = messages + 1
                 if alertson == True:
                     if timestamps == True:
                         print(datetime.datetime.now().strftime("%X")[:-3] + ":" + str(datetime.datetime.now().strftime("%S")) + " " + message+"\a")
@@ -61,6 +66,8 @@ while True:
                         print(datetime.datetime.now().strftime("%X")[:-3] + ":" + str(datetime.datetime.now().strftime("%X")) + " " + message)
                     else:
                         print(message) #prints message
+                if messages > 10000:
+                    quit()
         else:
             message = sys.stdin.readline()
             if message[:1] == "/": #checks for commands
@@ -102,6 +109,7 @@ while True:
                 args = None
             else:
                 sendmess(message)
+                messages = 0
                 sys.stdout.write("\033[F") # delete stuff the user typed
                 if timestamps == True:
                     sys.stdout.write(datetime.datetime.now().strftime("%X")[:-3] + ":" + str(datetime.datetime.now().strftime("%S")) + " ") #that's the time

@@ -4,6 +4,7 @@ from thread import *
 import sys
 import random
 import re
+import atexit
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 """
@@ -11,6 +12,10 @@ the first argument AF_INET is the address domain of the socket. This is used whe
 with any two hosts
 The second argument is the type of socket. SOCK_STREAM means that data or characters are read in a continuous flow
 """
+
+def exit_handler():
+    broadcast("TIME TO DIE BEPIS MC WEPIS", "literally the worst coding skills dummy variable")
+
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 if len(sys.argv) != 3:
     print "Correct usage: script, IP address, port number"
@@ -82,6 +87,7 @@ def clientthread(conn, addr):
     broadcast("[god] " + clientname[1:-1] + " has left",conn) #disconnect message
     print(addr[0] + " disconnected") # private disconnect message
     return(None) #Prevents battery roasting
+    conn.send("TIME TO DIE BEPIS MC WEPIS")
 
 def broadcast(message,connection):
     message = message.strip("\n")

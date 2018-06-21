@@ -13,3 +13,4 @@ Now with cool stuff like:
 - /clear
 - attempting to set your username to something stupid makes god scream in torment
 - trash comments
+- If you get 10,000 messages not containing the letter "e" the client quits itself
