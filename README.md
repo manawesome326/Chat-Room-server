@@ -14,3 +14,4 @@ Now with cool stuff like:
 - attempting to set your username to something stupid makes god scream in torment
 - trash comments
 - If you get 10,000 messages not containing the letter "e" the client quits itself
+- if you can get whispers working I will pay you 5 garlicoin
