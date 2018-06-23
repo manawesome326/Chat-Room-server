@@ -47,9 +47,7 @@ while True:
         if socks == server: # idk what this means
             message = socks.recv(2048)
             if message == "[god] Wow, nice guess. Now you can type as me!": #just checks if we're god now
-                isgod = True 
-            if message == "TIME TO DIE BEPIS MC WEPIS" or "" or None:
-                quit()
+                isgod = True
             if hastbegun == False: #never bongs on the first message
                 print(message)
                 hastbegun = True
@@ -67,6 +65,7 @@ while True:
                     else:
                         print(message) #prints message
                 if messages > 10000:
+                    print "crikes mcbikes"
                     quit()
         else:
             message = sys.stdin.readline()
